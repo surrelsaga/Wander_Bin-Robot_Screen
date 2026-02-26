@@ -46,27 +46,27 @@ void drawWaitingScreen() {
 
 // (Keep your drawHappyFace() and drawSadFace() functions here!)
 
-// --- Robot Face Functions (Now with Text!) ---
-void drawHappyFace(String itemName) {
+// --- Robot Face Functions ---
+void drawHappyFace() {
   gfx->fillScreen(BLACK); // Wipe the canvas
   
-  // Big Green Eyes
-  gfx->fillCircle(160, 120, 35, GREEN); 
-  gfx->fillCircle(320, 120, 35, GREEN); 
-  
-  // Happy Mouth 
-  gfx->fillRoundRect(140, 200, 200, 60, 30, GREEN);
-  
-  // Draw the Scanned Item Name
-  gfx->setTextColor(GREEN);
-  gfx->setTextSize(3);
-  gfx->setCursor(20, 280); // Placed at the bottom left
-  gfx->println("Item: " + itemName); // Prints "Item: Plastic Bottle"
+  // 1. Draw the base of the smile (Smaller Green Circle)
+  // Centered at X=240, dropped down to Y=220, with a cute 50-pixel radius
+  gfx->fillCircle(240, 220, 50, GREEN);
 
+  // 2. The Mask (Smaller Black Circle)
+  // Shifted exactly 20 pixels higher (Y=200) to cut out the top.
+  // This leaves a gentle, 20-pixel thick smile directly in the center!
+  gfx->fillCircle(240, 200, 50, BLACK);
+  
+  // 3. Big Green Eyes (Drawn LAST)
+  gfx->fillCircle(160, 110, 35, GREEN); // Left Eye
+  gfx->fillCircle(320, 110, 35, GREEN); // Right Eye
+  
   gfx->flush(); // Push the drawing to the screen!
 }
 
-void drawSadFace(String itemName) {
+void drawSadFace() {
   gfx->fillScreen(BLACK); // Wipe the canvas
   
   // Glaring Red Eyes
@@ -76,12 +76,6 @@ void drawSadFace(String itemName) {
   // Sad/Flat Mouth 
   gfx->fillRect(140, 220, 200, 20, RED);
   
-  // Draw the Scanned Item Name
-  gfx->setTextColor(RED);
-  gfx->setTextSize(3);
-  gfx->setCursor(20, 280); // Placed at the bottom left
-  gfx->println("Item: " + itemName); // Prints "Item: Styrofoam"
-
   gfx->flush(); // Push the drawing to the screen!
 }
 
@@ -147,12 +141,12 @@ void loop() {
             lastScannedItem = currentItem; // Save it so we don't trigger twice
 
             if (allowOpen == false) {
-              // Non-recyclable scanned! Pass the item name to the sad face.
+              // Non-recyclable scanned! 
               Serial.println("--> NON-RECYCLABLE SCANNED! Sad face...");
-              drawSadFace(currentItem); 
+              drawSadFace(); 
               
-              // Hold the sad face for 3 seconds, then automatically reset
-              delay(3000); 
+              // Hold the sad face for 5 seconds, then automatically reset
+              delay(5000); 
               drawWaitingScreen(); 
             }
           }
@@ -162,9 +156,9 @@ void loop() {
             lastLidIsOpen = isOpen;
 
             if (isOpen && allowOpen) {
-              // Lid opened! Pass the SAVED item name to the happy face.
+              // Lid opened! 
               Serial.println("--> LID OPENED! Happy face...");
-              drawHappyFace(lastScannedItem); 
+              drawHappyFace(); 
             } else if (!isOpen) {
               // The servo just closed the lid!
               Serial.println("--> LID CLOSED! Resetting...");
