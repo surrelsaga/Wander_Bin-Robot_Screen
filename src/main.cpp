@@ -50,18 +50,20 @@ void drawWaitingScreen() {
 void drawHappyFace() {
   gfx->fillScreen(BLACK); // Wipe the canvas
   
-  // 1. Draw the base of the smile (Smaller Green Circle)
-  // Centered at X=240, dropped down to Y=220, with a cute 50-pixel radius
-  gfx->fillCircle(240, 220, 50, GREEN);
-
-  // 2. The Mask (Smaller Black Circle)
-  // Shifted exactly 20 pixels higher (Y=200) to cut out the top.
-  // This leaves a gentle, 20-pixel thick smile directly in the center!
-  gfx->fillCircle(240, 200, 50, BLACK);
+  // 1. Draw a thick green circle
+  gfx->fillCircle(240, 160, 70, GREEN);
   
-  // 3. Big Green Eyes (Drawn LAST)
-  gfx->fillCircle(160, 110, 35, GREEN); // Left Eye
-  gfx->fillCircle(320, 110, 35, GREEN); // Right Eye
+  // 2. Erase the inside to make it a ring (15 pixels thick)
+  gfx->fillCircle(240, 160, 55, BLACK);
+  
+  // 3. Erase the top half of the ring with a black rectangle
+  // This leaves only a perfect, friendly curved line at the bottom!
+  gfx->fillRect(160, 80, 160, 95, BLACK);
+
+  // 4. Big Green Eyes (Drawn LAST so the mask doesn't erase them)
+  // Perfectly aligned with the outer edges of the smile
+  gfx->fillCircle(170, 120, 25, GREEN); // Left Eye
+  gfx->fillCircle(310, 120, 25, GREEN); // Right Eye
   
   gfx->flush(); // Push the drawing to the screen!
 }
