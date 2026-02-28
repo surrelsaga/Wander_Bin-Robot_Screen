@@ -148,7 +148,7 @@ void loop() {
               drawSadFace(); 
               
               // Hold the sad face for 5 seconds, then automatically reset
-              delay(5000); 
+              delay(6000); //time that the audio for sad face lasts
               drawWaitingScreen(); 
             }
           }
@@ -161,6 +161,7 @@ void loop() {
               // Lid opened! 
               Serial.println("--> LID OPENED! Happy face...");
               drawHappyFace(); 
+              delay(4000) // time that the audio for happy face lasts
             } else if (!isOpen) {
               // The servo just closed the lid!
               Serial.println("--> LID CLOSED! Resetting...");
